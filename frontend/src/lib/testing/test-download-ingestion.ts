@@ -4,8 +4,8 @@ import { downloadIngestionService } from "../ingestion/download-ingestion-servic
 async function main() {
     runMigrations();
 
-    downloadIngestionService.ingest(
-        "/Users/absksync/Downloads/sample.pdf"
+    await downloadIngestionService.ingest(
+        "/Users/absksync/Downloads/sample.txt"
     );
 }
 
