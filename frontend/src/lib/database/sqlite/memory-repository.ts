@@ -65,6 +65,31 @@ export class MemoryRepository {
             updatedAt: new Date(row.updated_at),
         }));
     }
+
+    getRecent(limit: number): Memory[] {
+        const statement = sqlite.connection.prepare(`
+            SELECT *
+            FROM memories
+            ORDER BY created_at DESC
+            LIMIT ?
+        `);
+
+        const rows = statement.all(limit) as any[];
+
+        return rows.map((row) => ({
+            id: row.id,
+            source: row.source,
+            title: row.title,
+            content: row.content,
+            summary: row.summary ?? undefined,
+            tags: row.tags
+                ? JSON.parse(row.tags)
+                : [],
+            filePath: row.file_path ?? undefined,
+            createdAt: new Date(row.created_at),
+            updatedAt: new Date(row.updated_at),
+        }));
+    }
 }
 
 export const memoryRepository =
