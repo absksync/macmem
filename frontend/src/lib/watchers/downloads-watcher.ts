@@ -5,6 +5,7 @@ import { FileWatcher } from "./file-watcher";
 
 export class DownloadsWatcher implements FileWatcher {
     private downloadsPath: string;
+    private watcher?: fs.FSWatcher;
 
     constructor() {
         this.downloadsPath = path.join(
@@ -18,16 +19,26 @@ export class DownloadsWatcher implements FileWatcher {
             `Watching downloads folder: ${this.downloadsPath}`
         );
 
-        fs.watch(this.downloadsPath, (eventType, filename) => {
-            if (!filename) return;
+        this.watcher = fs.watch(
+            this.downloadsPath,
+            (eventType, filename) => {
+                if (!filename) return;
 
-            console.log(
-                `[DownloadsWatcher] ${eventType}: ${filename}`
-            );
-        });
+                if (filename === ".DS_Store") return;
+
+                console.log(
+                    `[DownloadsWatcher] ${eventType}: ${filename}`
+                );
+            }
+        );
     }
 
     async stop(): Promise<void> {
+        if (this.watcher) {
+            this.watcher.close();
+            this.watcher = undefined;
+        }
+
         console.log("Downloads watcher stopped");
     }
 }
