@@ -10,6 +10,10 @@ export class MemoryService {
     getRecentMemories(limit = 100): Memory[] {
         return memoryRepository.getRecent(limit);
     }
+
+    searchMemories(query: string): Memory[] {
+        return memoryRepository.search(query);
+    }
 }
 
 export const memoryService =
