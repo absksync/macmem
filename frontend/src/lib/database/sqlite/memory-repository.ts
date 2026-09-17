@@ -90,6 +90,35 @@ export class MemoryRepository {
             updatedAt: new Date(row.updated_at),
         }));
     }
+
+    getById(id: string): Memory | null {
+        const statement = sqlite.connection.prepare(`
+            SELECT *
+            FROM memories
+            WHERE id = ?
+            LIMIT 1
+        `);
+
+        const row = statement.get(id) as any;
+
+        if (!row) {
+            return null;
+        }
+
+        return {
+            id: row.id,
+            source: row.source,
+            title: row.title,
+            content: row.content,
+            summary: row.summary ?? undefined,
+            tags: row.tags
+                ? JSON.parse(row.tags)
+                : [],
+            filePath: row.file_path ?? undefined,
+            createdAt: new Date(row.created_at),
+            updatedAt: new Date(row.updated_at),
+        };
+    }
 }
 
 export const memoryRepository =
