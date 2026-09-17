@@ -1,0 +1,22 @@
+# Node
+node_modules
+
+# Next.js
+.next
+out
+
+# macOS
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
