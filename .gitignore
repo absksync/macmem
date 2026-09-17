@@ -15,3 +15,8 @@ out
 
 # Logs
 npm-debug.log*
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
