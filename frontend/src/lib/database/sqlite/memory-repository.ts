@@ -32,6 +32,34 @@ export class MemoryRepository {
         );
     }
 
+    getById(id: string): Memory | null {
+        const statement = sqlite.connection.prepare(`
+            SELECT *
+            FROM memories
+            WHERE id = ?
+        `);
+
+        const row = statement.get(id) as any;
+
+        if (!row) {
+            return null;
+        }
+
+        return {
+            id: row.id,
+            source: row.source,
+            title: row.title,
+            content: row.content,
+            summary: row.summary ?? undefined,
+            tags: row.tags
+                ? JSON.parse(row.tags)
+                : [],
+            filePath: row.file_path ?? undefined,
+            createdAt: new Date(row.created_at),
+            updatedAt: new Date(row.updated_at),
+        };
+    }
+
     search(query: string): Memory[] {
         const statement = sqlite.connection.prepare(`
             SELECT *
