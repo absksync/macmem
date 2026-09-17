@@ -22,7 +22,7 @@ export class DownloadsWatcher implements FileWatcher {
 
         this.watcher = fs.watch(
             this.downloadsPath,
-            (eventType, filename) => {
+            async (eventType, filename) => {
                 if (!filename) return;
 
                 if (filename === ".DS_Store") return;
@@ -38,7 +38,7 @@ export class DownloadsWatcher implements FileWatcher {
 
                 if (eventType === "rename") {
                     try {
-                        downloadIngestionService.ingest(
+                        await downloadIngestionService.ingest(
                             fullPath
                         );
                     } catch (error) {
