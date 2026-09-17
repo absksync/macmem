@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 
 import { FileWatcher } from "./file-watcher";
+import { downloadIngestionService } from "@/lib/ingestion/download-ingestion-service";
 
 export class DownloadsWatcher implements FileWatcher {
     private downloadsPath: string;
@@ -26,9 +27,27 @@ export class DownloadsWatcher implements FileWatcher {
 
                 if (filename === ".DS_Store") return;
 
+                const fullPath = path.join(
+                    this.downloadsPath,
+                    filename.toString()
+                );
+
                 console.log(
                     `[DownloadsWatcher] ${eventType}: ${filename}`
                 );
+
+                if (eventType === "rename") {
+                    try {
+                        downloadIngestionService.ingest(
+                            fullPath
+                        );
+                    } catch (error) {
+                        console.error(
+                            "[DownloadsWatcher] ingestion failed:",
+                            error
+                        );
+                    }
+                }
             }
         );
     }
