@@ -31,7 +31,21 @@ export default async function MemoryPage({
                     {memory.createdAt.toLocaleString()}
                 </div>
 
+                {memory.filePath && (
+                    <div className="mt-6 overflow-hidden rounded-xl border bg-white">
+                        <img
+                            src={`/api/image/${memory.id}`}
+                            alt={memory.title}
+                            className="w-full object-contain"
+                        />
+                    </div>
+                )}
+
                 <div className="mt-6 rounded-xl border bg-white p-6">
+                    <h2 className="mb-4 text-lg font-semibold">
+                        OCR Content
+                    </h2>
+
                     <pre className="whitespace-pre-wrap break-words text-sm">
                         {memory.content}
                     </pre>
